@@ -148,6 +148,7 @@ open class SocketEngine:
     private var secure = false
     private var certPinner: CertificatePinning?
     private var selfSigned = false
+    private var useCustomEngine = true
 
     // MARK: Initializers
 
@@ -307,7 +308,7 @@ open class SocketEngine:
             includingCookies: session?.configuration.httpCookieStorage?.cookies(for: urlPollingWithSid)
         )
 
-        ws = WebSocket(request: req, certPinner: certPinner, compressionHandler: compress ? WSCompression() : nil)
+        ws = WebSocket(request: req, certPinner: certPinner, compressionHandler: useCustomEngine && compress ? WSCompression() : nil, preferredTransport: useCustomEngine ? .tcp : .native)
         ws?.callbackQueue = engineQueue
         ws?.delegate = self
 
@@ -626,6 +627,8 @@ open class SocketEngine:
                 self.enableSOCKSProxy = true
             case let .version(num):
                 version = num
+            case .useCustomEngine(let useCustomEngine):
+                self.useCustomEngine = useCustomEngine
             default:
                 continue
             }

@@ -110,6 +110,8 @@ public enum SocketIOClientOption : ClientOption {
 
     /// The version of socket.io being used. This should match the server version. Default is 3.
     case version(SocketIOVersion)
+    
+    case useCustomEngine(Bool)
 
     // MARK: Properties
 
@@ -162,6 +164,8 @@ public enum SocketIOClientOption : ClientOption {
             description = "enableSOCKSProxy"
         case .version:
             description = "version"
+        case .useCustomEngine:
+            description = "useCustomEngine"
         }
 
         return description
@@ -215,6 +219,8 @@ public enum SocketIOClientOption : ClientOption {
             value = enable
         case let.version(versionNum):
             value = versionNum
+        case let .useCustomEngine(useCustomEngine):
+            value = useCustomEngine
         }
 
         return value
